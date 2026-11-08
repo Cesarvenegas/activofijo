@@ -1,0 +1,14 @@
+# Producción: todo por variables de entorno, nunca credenciales en el repositorio.
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+server:
+  port: ${PORT:8080}
+  forward-headers-strategy: framework   # detrás de Nginx/Apache
+
+logging:
+  level:
+    root: INFO

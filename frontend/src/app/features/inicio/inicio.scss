@@ -1,0 +1,47 @@
+h1 {
+  margin: 0;
+  font: var(--mat-sys-headline-medium);
+  color: var(--kromas-azul);
+}
+
+.subtitulo {
+  margin: 4px 0 24px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.estado {
+  max-width: 560px;
+  background: var(--mat-sys-surface);
+}
+
+.fila {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  font-weight: 500;
+
+  &.ok mat-icon {
+    color: #2e7d32;
+  }
+
+  &.error {
+    color: var(--mat-sys-error);
+  }
+}
+
+.detalle {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 16px;
+  margin: 8px 0 0;
+  font-size: 14px;
+
+  dt {
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  dd {
+    margin: 0;
+  }
+}

@@ -1,0 +1,50 @@
+<mat-toolbar class="barra">
+  @if (esMovil()) {
+    <button mat-icon-button aria-label="Abrir menú" (click)="sidenav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  }
+  <a class="marca" routerLink="/inicio" aria-label="Kromas Inventa Gov, ir al inicio">
+    <span class="marca-k" aria-hidden="true">K<mat-icon class="marca-check">check</mat-icon></span>
+    <span class="marca-texto">
+      <strong>KROMAS</strong>
+      <small>INVENTA GOV</small>
+    </span>
+  </a>
+  <span class="espacio"></span>
+  <span class="lema">Control · Inventario · Trazabilidad</span>
+</mat-toolbar>
+
+<mat-sidenav-container class="contenedor">
+  <mat-sidenav #sidenav [mode]="modoSidenav()" [opened]="sidenavAbierto()" class="lateral">
+    <nav aria-label="Menú principal">
+      @for (grupo of menu; track $index) {
+        @if (grupo.titulo) {
+          <h3 class="grupo-titulo">{{ grupo.titulo }}</h3>
+        }
+        <mat-nav-list>
+          @for (item of grupo.items; track item.ruta) {
+            @if (item.habilitado) {
+              <a mat-list-item [routerLink]="item.ruta" routerLinkActive #rla="routerLinkActive"
+                 [activated]="rla.isActive" (click)="esMovil() && sidenav.close()">
+                <mat-icon matListItemIcon>{{ item.icono }}</mat-icon>
+                <span matListItemTitle>{{ item.etiqueta }}</span>
+              </a>
+            } @else {
+              <a mat-list-item disabled matTooltip="Disponible próximamente" matTooltipPosition="right">
+                <mat-icon matListItemIcon>{{ item.icono }}</mat-icon>
+                <span matListItemTitle>{{ item.etiqueta }}</span>
+              </a>
+            }
+          }
+        </mat-nav-list>
+      }
+    </nav>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="contenido">
+    <main>
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

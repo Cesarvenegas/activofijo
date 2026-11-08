@@ -1,0 +1,10 @@
+# En el repositorio todo se guarda con LF; en Windows git lo convierte al hacer checkout.
+* text=auto eol=lf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.pdf binary
+*.xlsx binary

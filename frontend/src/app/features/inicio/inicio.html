@@ -1,0 +1,43 @@
+<h1>Bienvenido</h1>
+<p class="subtitulo">Gestión inteligente de activos públicos</p>
+
+<mat-card appearance="outlined" class="estado">
+  <mat-card-header>
+    <mat-card-title>Estado del sistema</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    @if (cargando()) {
+      <div class="fila" role="status">
+        <mat-spinner diameter="24" />
+        <span>Consultando…</span>
+      </div>
+    } @else if (estado(); as e) {
+      @if (e.tipo === 'OK') {
+        <div class="fila ok" data-testid="estado-bd">
+          <mat-icon>check_circle</mat-icon>
+          <span>Base de datos: OK</span>
+        </div>
+        <dl class="detalle">
+          <dt>Versión</dt><dd>{{ e.salud.version }}</dd>
+          <dt>Motor</dt><dd>{{ e.salud.baseDatos.version }}</dd>
+          <dt>Consultado</dt><dd>{{ e.salud.fecha | date: 'dd-MM-yyyy HH:mm:ss' }}</dd>
+        </dl>
+      } @else if (e.tipo === 'SIN_BASE_DATOS') {
+        <div class="fila error" role="alert" data-testid="estado-bd">
+          <mat-icon>error</mat-icon>
+          <span>Base de datos: sin conexión. El servidor está activo, pero no puede conectarse a PostgreSQL.</span>
+        </div>
+      } @else {
+        <div class="fila error" role="alert" data-testid="estado-bd">
+          <mat-icon>cloud_off</mat-icon>
+          <span>{{ e.mensaje }}</span>
+        </div>
+      }
+    }
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button (click)="consultar()" [disabled]="cargando()">
+      <mat-icon>refresh</mat-icon> Volver a consultar
+    </button>
+  </mat-card-actions>
+</mat-card>

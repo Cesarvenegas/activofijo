@@ -1,0 +1,9 @@
+# Raíz del repositorio (backend/ y frontend/ tienen su propio .gitignore)
+activo-fijo-inicio.zip
+*.log
+.env
+.env.*
+.idea/
+*.iml
+.DS_Store
+Thumbs.db

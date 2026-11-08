@@ -1,0 +1,36 @@
+@use '@angular/material' as mat;
+
+// Tema Kromas Inventa Gov: azul marino institucional + naranjo del check del logo.
+html {
+  color-scheme: light;
+  @include mat.theme((
+    color: (
+      primary: mat.$azure-palette,
+      tertiary: mat.$orange-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+
+  // Colores de marca exactos sobre el tema base
+  --kromas-azul: #173a5e;
+  --kromas-azul-claro: #24507e;
+  --kromas-naranjo: #ee7d2b;
+  --kromas-fondo: #f4f6f9;
+
+  @include mat.toolbar-overrides((
+    container-background-color: var(--kromas-azul),
+    container-text-color: #ffffff,
+  ));
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  background: var(--kromas-fondo);
+  color: var(--mat-sys-on-surface);
+}

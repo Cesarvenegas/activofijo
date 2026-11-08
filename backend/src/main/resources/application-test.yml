@@ -1,0 +1,4 @@
+# Tests: la conexión la entrega Testcontainers (@ServiceConnection).
+logging:
+  level:
+    cl.activofijo: DEBUG

@@ -1,0 +1,27 @@
+# PostgreSQL para desarrollo local.  Uso: docker compose up -d
+# Credenciales solo de desarrollo; en producción se usan variables de entorno.
+name: kromas-inventa-gov
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: activofijo-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: activofijo
+      POSTGRES_USER: activofijo
+      POSTGRES_PASSWORD: activofijo
+      TZ: America/Santiago
+      PGTZ: America/Santiago
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U activofijo -d activofijo"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:

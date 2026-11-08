@@ -1,0 +1,20 @@
+# Desarrollo local: PostgreSQL de docker-compose.yml
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/activofijo
+    username: activofijo
+    password: activofijo
+    hikari:
+      connection-timeout: 3000   # falla rápido si PostgreSQL está apagado
+  jpa:
+    show-sql: false
+
+logging:
+  level:
+    cl.activofijo: DEBUG
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true

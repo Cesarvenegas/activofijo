@@ -1,0 +1,101 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.barra {
+  position: relative;
+  z-index: 2;
+  gap: 8px;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: inherit;
+  text-decoration: none;
+}
+
+// Marca provisoria hasta contar con el archivo del logo del cliente (SVG/PNG).
+.marca-k {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.marca-check {
+  position: absolute;
+  right: -8px;
+  top: -4px;
+  color: var(--kromas-naranjo);
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+  font-weight: 700;
+}
+
+.marca-texto {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+
+  strong {
+    font-size: 18px;
+    letter-spacing: 1px;
+  }
+
+  small {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--kromas-naranjo);
+  }
+}
+
+.espacio {
+  flex: 1;
+}
+
+.lema {
+  font-size: 13px;
+  opacity: 0.85;
+
+  @media (max-width: 599px) {
+    display: none;
+  }
+}
+
+.contenedor {
+  flex: 1;
+}
+
+.lateral {
+  width: 248px;
+  border-right: 1px solid var(--mat-sys-outline-variant);
+}
+
+.grupo-titulo {
+  margin: 16px 16px 0;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.contenido main {
+  padding: 24px;
+  max-width: 1400px;
+
+  @media (max-width: 599px) {
+    padding: 16px;
+  }
+}
