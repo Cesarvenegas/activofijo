@@ -1,0 +1,75 @@
+:host {
+  display: block;
+  background: var(--mat-sys-surface);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.panel-filtros:not(:empty) {
+  padding: 16px 16px 0;
+}
+
+.barra {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 16px 8px;
+  min-height: 40px;
+}
+
+.total {
+  font-size: 13px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.espacio {
+  flex: 1;
+}
+
+.contenedor-tabla {
+  position: relative;
+  overflow-x: auto;
+}
+
+.progreso {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+
+table {
+  width: 100%;
+}
+
+tr.mat-mdc-row {
+  cursor: pointer;
+
+  &:hover {
+    background: var(--mat-sys-surface-container-low);
+  }
+}
+
+th, td {
+  white-space: nowrap;
+}
+
+.acciones {
+  width: 1%;
+  text-align: right;
+}
+
+.mensaje {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 32px 16px;
+  color: var(--mat-sys-on-surface-variant);
+
+  &.error {
+    color: var(--mat-sys-error);
+  }
+}

@@ -1,0 +1,57 @@
+<main class="fondo">
+  <section class="tarjeta" aria-labelledby="titulo-login">
+    <div class="marca">
+      <span class="marca-k" aria-hidden="true">K<mat-icon class="marca-check">check</mat-icon></span>
+      <div>
+        <strong>KROMAS</strong>
+        <small>INVENTA GOV</small>
+      </div>
+    </div>
+    <p class="lema">Gestión inteligente de activos públicos</p>
+
+    <h1 id="titulo-login">Iniciar sesión</h1>
+
+    @if (error(); as e) {
+      <div class="error" role="alert"><mat-icon>error</mat-icon><span>{{ e }}</span></div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="ingresar()" novalidate>
+      <mat-form-field appearance="outline">
+        <mat-label>RUN</mat-label>
+        <mat-icon matPrefix>badge</mat-icon>
+        <input matInput formControlName="rut" placeholder="12.345.678-5" autocomplete="username"
+               inputmode="text" (blur)="formatearRutIngresado()">
+        @if (form.controls.rut.hasError('required')) {
+          <mat-error>Ingrese su RUN</mat-error>
+        } @else if (form.controls.rut.hasError('rut')) {
+          <mat-error>RUN inválido</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Contraseña</mat-label>
+        <mat-icon matPrefix>lock</mat-icon>
+        <input matInput formControlName="password" [type]="verPassword() ? 'text' : 'password'"
+               autocomplete="current-password">
+        <button mat-icon-button matSuffix type="button" (click)="verPassword.set(!verPassword())"
+                [attr.aria-label]="verPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+          <mat-icon>{{ verPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (form.controls.password.hasError('required')) {
+          <mat-error>Ingrese su contraseña</mat-error>
+        }
+      </mat-form-field>
+
+      <button mat-flat-button type="submit" class="ingresar" [disabled]="ingresando()">
+        @if (ingresando()) {
+          <mat-spinner diameter="20" />
+        } @else {
+          Ingresar
+        }
+      </button>
+    </form>
+
+    <p class="ayuda">¿Olvidó su contraseña? Solicite al administrador del sistema que la resetee.</p>
+  </section>
+  <p class="pie">Control · Inventario · Trazabilidad</p>
+</main>

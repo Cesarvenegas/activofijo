@@ -8,6 +8,10 @@ spring:
 server:
   port: ${PORT:8080}
   forward-headers-strategy: framework   # detrás de Nginx/Apache
+  servlet:
+    session:
+      cookie:
+        secure: true                    # solo por HTTPS
 
 logging:
   level:

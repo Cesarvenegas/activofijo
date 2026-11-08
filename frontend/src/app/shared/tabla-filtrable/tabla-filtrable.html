@@ -1,0 +1,50 @@
+<div class="panel-filtros">
+  <ng-content select="[filtros]" />
+</div>
+
+<div class="barra">
+  <span class="total" aria-live="polite">
+    {{ total() }} {{ total() === 1 ? 'registro' : 'registros' }}
+  </span>
+  <span class="espacio"></span>
+  <ng-content select="[acciones]" />
+</div>
+
+<div class="contenedor-tabla">
+  @if (cargando()) {
+    <mat-progress-bar mode="indeterminate" class="progreso" aria-label="Cargando" />
+  }
+
+  <table mat-table [dataSource]="filas()" matSort
+         [matSortActive]="orden().active" [matSortDirection]="orden().direction"
+         (matSortChange)="cambiarOrden($event)">
+    @for (col of columnas(); track col.id) {
+      <ng-container [matColumnDef]="col.id">
+        <th mat-header-cell *matHeaderCellDef [mat-sort-header]="col.id" [disabled]="!col.ordenable"
+            [class]="col.clase ?? ''">
+          {{ col.titulo }}
+        </th>
+        <td mat-cell *matCellDef="let fila" [class]="col.clase ?? ''">
+          @if (plantilla(col.id); as tpl) {
+            <ng-container *ngTemplateOutlet="tpl; context: { $implicit: fila }" />
+          } @else {
+            {{ valor(fila, col) }}
+          }
+        </td>
+      </ng-container>
+    }
+
+    <tr mat-header-row *matHeaderRowDef="idsColumnas(); sticky: true"></tr>
+    <tr mat-row *matRowDef="let fila; columns: idsColumnas()" (click)="filaClick.emit(fila)"></tr>
+  </table>
+
+  @if (error(); as e) {
+    <div class="mensaje error" role="alert"><mat-icon>error</mat-icon>{{ e }}</div>
+  } @else if (!cargando() && filas().length === 0) {
+    <div class="mensaje"><mat-icon>search_off</mat-icon>No hay registros que coincidan con los filtros.</div>
+  }
+</div>
+
+<mat-paginator [length]="total()" [pageIndex]="pagina()" [pageSize]="tamano()"
+               [pageSizeOptions]="[25, 50, 100, 200]" showFirstLastButtons
+               (page)="cambiarPagina($event)" />

@@ -1,0 +1,92 @@
+<header class="encabezado">
+  <div>
+    <h1>Usuarios</h1>
+    <p>Personas que pueden ingresar al sistema y sus permisos.</p>
+  </div>
+  <button mat-flat-button (click)="nuevo()">
+    <mat-icon>person_add</mat-icon> Nuevo usuario
+  </button>
+</header>
+
+<app-tabla-filtrable
+  [columnas]="columnas"
+  [cargar]="cargar"
+  [filtros]="filtros()"
+  [ordenInicial]="{ active: 'nombre', direction: 'asc' }"
+  (filaClick)="editar($event)">
+
+  <div filtros class="filtros">
+    <mat-form-field class="buscar" subscriptSizing="dynamic">
+      <mat-label>Buscar</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput [formControl]="filtroTexto" placeholder="Nombre, RUN, correo o cargo">
+    </mat-form-field>
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>Rol</mat-label>
+      <mat-select [formControl]="filtroRol">
+        <mat-option value="">Todos</mat-option>
+        @for (r of roles; track r[0]) {
+          <mat-option [value]="r[0]">{{ r[1] }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>Estado</mat-label>
+      <mat-select [formControl]="filtroActivo">
+        <mat-option [value]="true">Activos</mat-option>
+        <mat-option [value]="false">Inactivos</mat-option>
+        <mat-option value="">Todos</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-button (click)="limpiarFiltros()">Limpiar</button>
+  </div>
+
+  <ng-template appCelda="rol" let-fila>
+    @let u = comoUsuario(fila);
+    {{ nombreRol[u.rol] }}
+  </ng-template>
+
+  <ng-template appCelda="estado" let-fila>
+    @let u = comoUsuario(fila);
+    <mat-chip-set>
+      @if (!u.activo) {
+        <mat-chip class="inactivo">Inactivo</mat-chip>
+      } @else if (u.bloqueado) {
+        <mat-chip class="bloqueado" matTooltip="Bloqueado por intentos fallidos. Resetear la clave lo desbloquea.">
+          Bloqueado
+        </mat-chip>
+      } @else if (u.debeCambiarPassword) {
+        <mat-chip matTooltip="Aún no cambia su clave temporal">Clave temporal</mat-chip>
+      } @else {
+        <mat-chip class="activo">Activo</mat-chip>
+      }
+    </mat-chip-set>
+  </ng-template>
+
+  <ng-template appCelda="ultimoAcceso" let-fila>
+    @let u = comoUsuario(fila);
+    {{ u.ultimoAcceso ? (u.ultimoAcceso | date: 'dd-MM-yyyy HH:mm') : 'Nunca' }}
+  </ng-template>
+
+  <ng-template appCelda="acciones" let-fila>
+    @let u = comoUsuario(fila);
+    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()"
+            [attr.aria-label]="'Acciones para ' + u.nombre">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="editar(u)">
+        <mat-icon>edit</mat-icon> Editar
+      </button>
+      <button mat-menu-item (click)="resetearPassword(u)">
+        <mat-icon>lock_reset</mat-icon> Resetear contraseña
+      </button>
+      @if (u.id !== yo()?.id) {
+        <button mat-menu-item (click)="cambiarActivo(u)">
+          <mat-icon>{{ u.activo ? 'person_off' : 'person' }}</mat-icon>
+          {{ u.activo ? 'Desactivar' : 'Activar' }}
+        </button>
+      }
+    </mat-menu>
+  </ng-template>
+</app-tabla-filtrable>

@@ -93,6 +93,12 @@ módulo backend: `Entidad`, `Repository`, `Service`, `Controller`, `dto/`, `mapp
 
 ## 4. Multiempresa (regla crítica)
 
+> **Estado (Etapa 1):** la multiempresa está **postergada** por decisión del usuario. Hoy no existe
+> la tabla `empresa` ni `@TenantId`, y las entidades extienden `comun.EntidadBase`. Antes de
+> implementarla, decidir si se llamará "Empresa" o "Institución". Agregarla después exige una
+> migración que agregue `empresa_id` a todas las tablas existentes: conviene hacerlo pronto.
+> Lo que sigue describe el diseño previsto.
+
 - Toda entidad de negocio extiende `EntidadEmpresa`, que tiene `empresa_id` marcado con
   `@TenantId` de Hibernate. El `CurrentTenantIdentifierResolver` toma la empresa del usuario en sesión.
 - **Nunca** escribir consultas nativas (`nativeQuery = true`) sin filtrar `empresa_id`
@@ -141,6 +147,11 @@ pesimista (`SELECT ... FOR UPDATE`). Formatos:
 - Diseño responsive; las pantallas de inventario físico deben funcionar en celular.
 
 ## 6. Roles
+
+**Login con RUN** (normalizado `12345678-K`, único) + contraseña. No existe campo username.
+Implementado en Etapa 1: ADMIN, OPERADOR, CONSULTA (SUPERADMIN llega con la multiempresa).
+Reglas de seguridad: ver `auth/` y `usuario/` (bloqueo 15 min tras 5 intentos, clave ≥ 8 con letras
+y números, clave temporal obliga a cambiarla, un ADMIN no puede desactivarse ni quitarse el rol).
 
 | Rol | Puede |
 |---|---|

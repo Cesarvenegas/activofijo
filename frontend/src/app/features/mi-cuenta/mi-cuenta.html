@@ -1,0 +1,73 @@
+<h1>Mi cuenta</h1>
+
+@if (usuario(); as u) {
+  @if (u.debeCambiarPassword) {
+    <div class="aviso" role="alert">
+      <mat-icon>key</mat-icon>
+      <span>Está usando una <strong>clave temporal</strong>. Debe cambiarla para continuar usando el sistema.</span>
+    </div>
+  }
+
+  <div class="columnas">
+    <mat-card appearance="outlined">
+      <mat-card-header><mat-card-title>Mis datos</mat-card-title></mat-card-header>
+      <mat-card-content>
+        <dl>
+          <dt>Nombre</dt><dd>{{ u.nombre }}</dd>
+          <dt>RUN</dt><dd>{{ u.rutFormateado }}</dd>
+          <dt>Rol</dt><dd>{{ nombreRol[u.rol] }}</dd>
+          <dt>Cargo</dt><dd>{{ u.cargo || '—' }}</dd>
+          <dt>Correo</dt><dd>{{ u.email || '—' }}</dd>
+          <dt>Teléfono</dt><dd>{{ u.telefonoAnexo || '—' }}</dd>
+          <dt>Último acceso</dt><dd>{{ u.ultimoAcceso ? (u.ultimoAcceso | date: 'dd-MM-yyyy HH:mm') : '—' }}</dd>
+        </dl>
+        <p class="nota">Para modificar sus datos, contacte al administrador.</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card appearance="outlined">
+      <mat-card-header><mat-card-title>Cambiar contraseña</mat-card-title></mat-card-header>
+      <mat-card-content>
+        @if (error(); as e) {
+          <p class="error" role="alert">{{ e }}</p>
+        }
+        <form [formGroup]="form" #formDir="ngForm" (ngSubmit)="cambiar(formDir)">
+          <mat-form-field>
+            <mat-label>{{ u.debeCambiarPassword ? 'Clave temporal' : 'Contraseña actual' }}</mat-label>
+            <input matInput type="password" formControlName="passwordActual" autocomplete="current-password">
+            @if (form.controls.passwordActual.hasError('required')) {
+              <mat-error>Ingrese su contraseña actual</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Nueva contraseña</mat-label>
+            <input matInput type="password" formControlName="passwordNueva" autocomplete="new-password">
+            <mat-hint>Mínimo 8 caracteres, con letras y números</mat-hint>
+            @if (form.controls.passwordNueva.hasError('required')) {
+              <mat-error>Ingrese la nueva contraseña</mat-error>
+            } @else if (form.controls.passwordNueva.hasError('politica')) {
+              <mat-error>Mínimo 8 caracteres, con letras y números</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Repetir nueva contraseña</mat-label>
+            <input matInput type="password" formControlName="confirmacion" autocomplete="new-password">
+            @if (form.controls.confirmacion.hasError('required')) {
+              <mat-error>Repita la nueva contraseña</mat-error>
+            }
+          </mat-form-field>
+          @if (form.hasError('noCoinciden') && form.controls.confirmacion.touched) {
+            <p class="error">Las contraseñas no coinciden</p>
+          }
+          <button mat-flat-button type="submit" [disabled]="guardando()">
+            @if (guardando()) {
+              <mat-spinner diameter="18" />
+            } @else {
+              Cambiar contraseña
+            }
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+}

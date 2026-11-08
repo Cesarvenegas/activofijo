@@ -2,6 +2,10 @@ package cl.activofijo.comun.error;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.core.PropertyReferenceException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -42,9 +46,39 @@ public class ManejadorErrores extends ResponseEntityExceptionHandler {
         return problema(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    @ExceptionHandler(ReglaNegocioException.class)
-    ProblemDetail reglaNegocio(ReglaNegocioException ex) {
-        return problema(HttpStatus.UNPROCESSABLE_CONTENT, ex.getMessage());
+    @ExceptionHandler(ErrorApi.class)
+    ResponseEntity<ProblemDetail> errorApi(ErrorApi ex) {
+        ProblemDetail pd = problema(ex.getStatus(), ex.getMessage());
+        pd.setProperty("codigo", ex.getCodigo());
+        return ResponseEntity.status(ex.getStatus()).body(pd);
+    }
+
+    /** Seguridad a nivel de método: se responde igual que en los filtros. */
+    @ExceptionHandler(AccessDeniedException.class)
+    ProblemDetail accesoDenegado(AccessDeniedException ex) {
+        ProblemDetail pd = problema(HttpStatus.FORBIDDEN, "No tiene permisos para realizar esta operación.");
+        pd.setProperty("codigo", "SIN_PERMISO");
+        return pd;
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    ProblemDetail noAutenticado(AuthenticationException ex) {
+        ProblemDetail pd = problema(HttpStatus.UNAUTHORIZED, "Debe iniciar sesión para continuar.");
+        pd.setProperty("codigo", "NO_AUTENTICADO");
+        return pd;
+    }
+
+    /** Orden (?sort=) por una propiedad que no existe. */
+    @ExceptionHandler(PropertyReferenceException.class)
+    ProblemDetail propiedadInvalida(PropertyReferenceException ex) {
+        return problema(HttpStatus.BAD_REQUEST, "No se puede ordenar ni filtrar por '" + ex.getPropertyName() + "'");
+    }
+
+    /** Restricción de BD violada (normalmente un duplicado que la validación previa no alcanzó a ver). */
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    ProblemDetail integridad(DataIntegrityViolationException ex) {
+        log.warn("Violación de integridad: {}", ex.getMostSpecificCause().getMessage());
+        return problema(HttpStatus.CONFLICT, "La operación entra en conflicto con datos existentes (posible duplicado).");
     }
 
     @ExceptionHandler(Exception.class)

@@ -1,0 +1,49 @@
+.encabezado {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+
+  h1 {
+    margin: 0;
+    font: var(--mat-sys-headline-small);
+    color: var(--kromas-azul);
+  }
+
+  p {
+    margin: 4px 0 0;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+
+  .buscar {
+    flex: 1 1 280px;
+  }
+
+  mat-form-field:not(.buscar) {
+    width: 160px;
+  }
+}
+
+mat-chip.activo {
+  --mat-chip-elevated-container-color: #e6f4ea;
+  --mat-chip-label-text-color: #1e6b34;
+}
+
+mat-chip.bloqueado {
+  --mat-chip-elevated-container-color: #fdecea;
+  --mat-chip-label-text-color: var(--mat-sys-error);
+}
+
+mat-chip.inactivo {
+  --mat-chip-elevated-container-color: var(--mat-sys-surface-container-high);
+  --mat-chip-label-text-color: var(--mat-sys-on-surface-variant);
+}

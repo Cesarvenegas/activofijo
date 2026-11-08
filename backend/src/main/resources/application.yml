@@ -20,11 +20,33 @@ spring:
   mvc:
     problemdetails:
       enabled: true
+  autoconfigure:
+    # Usuarios propios en BD: no crear el usuario en memoria por defecto de Spring Boot
+    exclude: org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration
+  session:
+    timeout: 2h                   # sesión inactiva expira a las 2 horas
+    jdbc:
+      initialize-schema: never    # las tablas las crea Flyway (V2)
+  data:
+    web:
+      pageable:
+        max-page-size: 200
 
 server:
   port: 8080
   error:
     include-stacktrace: never
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        same-site: lax
+
+# Primer administrador (solo si la tabla usuario está vacía). Ver UsuariosIniciales.
+app:
+  admin-inicial:
+    rut: ${APP_ADMIN_RUT:}
+    password: ${APP_ADMIN_PASSWORD:}
 
 management:
   endpoints:

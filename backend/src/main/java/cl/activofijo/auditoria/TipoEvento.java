@@ -1,0 +1,14 @@
+package cl.activofijo.auditoria;
+
+public enum TipoEvento {
+    LOGIN_OK,
+    LOGIN_FALLIDO,
+    LOGIN_BLOQUEADO,
+    LOGOUT,
+    CAMBIO_PASSWORD,
+    RESET_PASSWORD,
+    USUARIO_CREADO,
+    USUARIO_MODIFICADO,
+    USUARIO_ACTIVADO,
+    USUARIO_DESACTIVADO
+}

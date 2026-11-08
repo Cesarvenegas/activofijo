@@ -30,5 +30,11 @@ npm run build
 
 En Linux/macOS usar `./mvnw` en lugar de `.\mvnw.cmd`.
 
+Usuarios de desarrollo (perfil `dev`), clave `Kromas2026`:
+`11.111.111-1` (Administrador), `22.222.222-2` (Operador), `33.333.333-3` (Consulta).
+
+En producción, el primer administrador se crea definiendo `APP_ADMIN_RUT` y `APP_ADMIN_PASSWORD`
+(solo si no existe ningún usuario; deberá cambiar la clave al ingresar).
+
 - Estado del sistema: `GET http://localhost:8080/api/v1/salud`
 - Swagger UI (solo perfil `dev`): http://localhost:8080/swagger-ui.html

@@ -1,0 +1,71 @@
+<h2 mat-dialog-title>{{ usuario ? 'Editar usuario' : 'Nuevo usuario' }}</h2>
+
+<mat-dialog-content>
+  @if (error(); as e) {
+    <p class="error" role="alert">{{ e }}</p>
+  }
+  <form [formGroup]="form" (ngSubmit)="guardar()" id="form-usuario">
+    <mat-form-field>
+      <mat-label>RUN</mat-label>
+      <input matInput formControlName="rut" placeholder="12.345.678-5" (blur)="formatearRutIngresado()"
+             autocomplete="off">
+      @if (usuario) {
+        <mat-hint>El RUN es el usuario de ingreso y no se puede modificar</mat-hint>
+      }
+      @if (form.controls.rut.hasError('required')) {
+        <mat-error>El RUN es obligatorio</mat-error>
+      } @else if (form.controls.rut.hasError('rut')) {
+        <mat-error>RUN inválido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Rol</mat-label>
+      <mat-select formControlName="rol">
+        @for (r of roles; track r[0]) {
+          <mat-option [value]="r[0]">{{ r[1] }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="completo">
+      <mat-label>Nombre completo</mat-label>
+      <input matInput formControlName="nombre" autocomplete="off">
+      @if (form.controls.nombre.hasError('required')) {
+        <mat-error>El nombre es obligatorio</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Correo electrónico</mat-label>
+      <input matInput type="email" formControlName="email" autocomplete="off">
+      @if (form.controls.email.hasError('email')) {
+        <mat-error>Correo electrónico inválido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Teléfono / anexo</mat-label>
+      <input matInput formControlName="telefonoAnexo" autocomplete="off">
+    </mat-form-field>
+
+    <mat-form-field class="completo">
+      <mat-label>Cargo</mat-label>
+      <input matInput formControlName="cargo" autocomplete="off">
+    </mat-form-field>
+  </form>
+  @if (!usuario) {
+    <p>Al guardar se generará una clave temporal que el usuario deberá cambiar en su primer ingreso.</p>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close [disabled]="guardando()">Cancelar</button>
+  <button mat-flat-button type="submit" form="form-usuario" [disabled]="guardando()">
+    @if (guardando()) {
+      <mat-spinner diameter="18" />
+    } @else {
+      Guardar
+    }
+  </button>
+</mat-dialog-actions>

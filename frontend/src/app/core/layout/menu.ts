@@ -1,9 +1,13 @@
+import { Rol } from '../auth/auth.service';
+
 /** Ítems del menú lateral. Los módulos se habilitan a medida que se implementa cada etapa. */
 export interface ItemMenu {
   etiqueta: string;
   icono: string;
   ruta: string;
   habilitado: boolean;
+  /** Roles que ven el ítem; sin valor = todos. */
+  roles?: Rol[];
 }
 
 export interface GrupoMenu {
@@ -36,8 +40,14 @@ export const MENU: GrupoMenu[] = [
   {
     titulo: 'Administración',
     items: [
-      { etiqueta: 'Tablas maestras', icono: 'table_chart', ruta: '/tablas-maestras', habilitado: false },
-      { etiqueta: 'Usuarios', icono: 'group', ruta: '/usuarios', habilitado: false },
+      { etiqueta: 'Tablas maestras', icono: 'table_chart', ruta: '/tablas-maestras', habilitado: false, roles: ['ADMIN'] },
+      { etiqueta: 'Usuarios', icono: 'group', ruta: '/usuarios', habilitado: true, roles: ['ADMIN'] },
     ],
   },
 ];
+
+/** Menú filtrado por rol; omite los grupos que quedan vacíos. */
+export function menuPara(rol: Rol | undefined): GrupoMenu[] {
+  return MENU.map((g) => ({ ...g, items: g.items.filter((i) => !i.roles || (rol && i.roles.includes(rol))) }))
+    .filter((g) => g.items.length > 0);
+}

@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { EstadoSistema, SaludService } from '../../core/salud/salud.service';
+import { AuthService } from '../../core/auth/auth.service';
 
 /** Página de inicio. En la Etapa 0 solo muestra el estado del sistema. */
 @Component({
@@ -15,6 +16,7 @@ import { EstadoSistema, SaludService } from '../../core/salud/salud.service';
 })
 export class Inicio {
   private readonly saludService = inject(SaludService);
+  protected readonly usuario = inject(AuthService).usuario;
 
   protected readonly cargando = signal(true);
   protected readonly estado = signal<EstadoSistema | null>(null);
